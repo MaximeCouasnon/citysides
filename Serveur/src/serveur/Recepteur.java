@@ -4,12 +4,12 @@
  */
 package serveur;
 
-import messages.Text;
 import données.Joueur;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import messages.Text;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
@@ -35,39 +35,54 @@ public class Recepteur extends Thread {
             Object o;
             try {
                 o = in.readObject();
-                if("messages.Text".equals(o.getClass().getName())) {
-                    Text t=(Text)o;
-                    t.setMessage(StringEscapeUtils.escapeHtml4(t.getMessage()));
-                }
-                Serveur.getSalon(Serveur.getJoueur(login).getIdSalon()).envoiObjet(o);
-                
-                switch (o.getClass().getName()) {
-                    case "messages.Text":
-                        //System.out.println(m.getDate() + m.getMessage());
-                        //salon.envoiObjet(o);
+                String s = o.getClass().getName();
 
-                        Text m = (Text) o;
-                        System.out.println(m.getLogin() + " : " + m.getMessage());
-                        break;
+                //On échappe les messages envoyés par les joueurs
+                if (s.equals("messages.Text")) {
+                    Text t = (Text) o;
+                    t.setMessage(StringEscapeUtils.escapeHtml4(t.getMessage()));
+                    System.out.println(t.getLogin() + " : " + t.getMessage());
                 }
+
+                //Forward du message à tous les gens du salon
+                if (!s.equals("messages.DeconnexionJoueur")) {
+                    Serveur.getSalon(Serveur.getJoueur(login).getIdSalon()).envoiObjet(o);
+                }
+                else {
+                    deconnexion();
+                    flag=false;
+                }
+
+                /*
+                 * switch (o.getClass().getName()) { case "messages.Text":
+                 * //System.out.println(m.getDate() + m.getMessage());
+                 * //salon.envoiObjet(o);
+                 *
+                 * Text m = (Text) o;
+                 *
+                 * break; }
+                 */
 
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Recepteur.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException e) {
-                //Cette exception se lance si le joueur a quitté le jeu
-
-                //Infos du joueur
-                Joueur j = Serveur.getJoueur(login);
-
-                //Le joueur quitte son salon
-                Serveur.getSalon(j.getIdSalon()).removeJoueur(login);
-
-                //Le joueur quitte le jeu
-                Serveur.removeJoueur(login);
-
+                //Cette exception se lance en cas de timeout
+                System.err.println(login + " : connection timeout");
+                deconnexion();
                 //On éteint le récepteur
                 flag = false;
             }
         }
+    }
+
+    public void deconnexion() {
+        //Infos du joueur
+        Joueur j = Serveur.getJoueur(login);
+
+        //Le joueur quitte son salon
+        Serveur.getSalon(j.getIdSalon()).removeJoueur(login);
+
+        //Le joueur quitte le jeu
+        Serveur.removeJoueur(login);
     }
 }
