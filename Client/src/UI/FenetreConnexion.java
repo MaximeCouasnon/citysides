@@ -47,7 +47,7 @@ public class FenetreConnexion extends javax.swing.JFrame {
         boutonConnexion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("La Maxime Alpha");
+        setTitle("Citysides Alpha");
         setResizable(false);
 
         jLabel1.setText("Login");

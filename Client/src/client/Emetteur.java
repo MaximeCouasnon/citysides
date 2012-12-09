@@ -49,6 +49,7 @@ public class Emetteur extends Thread {
         try {
             out.writeObject(o);
             out.flush();
+            //System.out.println("message envoyé"+o.getClass().getName());
         } catch (IOException ex) {
             Logger.getLogger(Emetteur.class.getName()).log(Level.SEVERE, null, ex);
         }

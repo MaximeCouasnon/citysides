@@ -112,7 +112,12 @@ public class FenetreJeu extends javax.swing.JFrame {
         jFormattedTextField1.setText("jFormattedTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("La Maxime Alpha");
+        setTitle("Citysides Alpha");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         barreInput.setToolTipText("Entrez vos messages ici");
         barreInput.setFocusCycleRoot(true);
@@ -152,6 +157,10 @@ public class FenetreJeu extends javax.swing.JFrame {
             barreInput.setText(null);
         }
     }//GEN-LAST:event_barreInputKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Client.deconnexion();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

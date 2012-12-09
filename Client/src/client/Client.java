@@ -19,6 +19,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import messages.DeconnexionJoueur;
 import messages.Text;
 
 public class Client {
@@ -50,6 +53,16 @@ public class Client {
         } catch (IOException e) {
             System.err.println("Aucun serveur à l'écoute du port " + socket.getLocalPort());
         }
+    }
+    
+    public static void deconnexion() {
+        moi.getEmetteur().envoiObjet(new DeconnexionJoueur(moi.getLogin()));
+        /*try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("socket fermé");*/
     }
 
     public static void jeu() {
