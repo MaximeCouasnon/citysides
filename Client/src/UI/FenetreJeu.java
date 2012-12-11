@@ -24,7 +24,10 @@ public class FenetreJeu extends javax.swing.JFrame {
 
     private DefaultCaret caret;
     private boolean vide = true;
-    private boolean scrollVisible=true;
+    private boolean scrollVisible = true;
+    private boolean scrollAuto;
+    private int scrollMax;
+    private boolean enBas;
 
     /**
      * Creates new form FenetreJeu
@@ -86,12 +89,19 @@ public class FenetreJeu extends javax.swing.JFrame {
 
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
-                if(!scrollVisible) {
+                if (!scrollVisible) {
                     scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
-                    scrollVisible=true;
+                    scrollVisible = true;
                 }
+
+                if (enBas && scrollAuto) {
+                    scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
+                    scrollAuto=false;
+                }
+                
             }
         });
+
         barreInput.requestFocus();
     }
 
@@ -202,17 +212,15 @@ public class FenetreJeu extends javax.swing.JFrame {
     }
 
     public void ecrire(String s) {
-        boolean enbas;
-
         JScrollBar scroll = jScrollPane1.getVerticalScrollBar();
-        int max = scroll.getMaximum();
+        scrollMax = scroll.getMaximum();
         scrollVisible = scroll.isShowing();
 
-        if (scrollVisible && scroll.getValue() + scroll.getVisibleAmount() == max) {
-            enbas = true;
-            max = scroll.getMaximum();
+        if (scrollVisible && scroll.getValue() + scroll.getVisibleAmount() == scrollMax) {
+            enBas = true;
+            //scrollMax = scroll.getMaximum();
         } else {
-            enbas = false;
+            enBas = false;
         }
 
         HTMLDocument d = (HTMLDocument) afficheurHTML.getStyledDocument();
@@ -224,25 +232,24 @@ public class FenetreJeu extends javax.swing.JFrame {
             } else {
                 d.insertBeforeEnd(a, s);
                 vide = false;
-
-
             }
         } catch (BadLocationException | IOException ex) {
             Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (enbas) {
-            while (scroll.getMaximum() == max) {
-                try {
-                    Thread.sleep(5);
+        scrollAuto = true;
 
-
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
+        /*
+         * if (enBas) { while (scroll.getMaximum() == scrollMax) { try {
+         * Thread.sleep(5);
+         *
+         *
+         * } catch (InterruptedException ex) {
+         * Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null,
+         * ex); } } scroll.setValue(scroll.getMaximum() -
+         * scroll.getVisibleAmount());
         }
+         */
 
         /*
          * if (jScrollPane1.getVerticalScrollBar().getValue() ==
