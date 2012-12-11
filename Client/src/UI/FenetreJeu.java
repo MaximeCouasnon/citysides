@@ -27,7 +27,7 @@ public class FenetreJeu extends javax.swing.JFrame {
     private boolean scrollVisible = true;
     private boolean scrollAuto;
     private int scrollMax;
-    private boolean enBas;
+    private boolean enBas=true;
 
     /**
      * Creates new form FenetreJeu
@@ -94,11 +94,14 @@ public class FenetreJeu extends javax.swing.JFrame {
                     scrollVisible = true;
                 }
 
-                if (enBas && scrollAuto) {
+                if (scrollAuto) {
                     scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
                     scrollAuto=false;
                 }
-                
+                /*else if(!scrollVisible || scroll.getValue() + scroll.getVisibleAmount() == scroll.getMaximum()) {
+                    enBas=true;
+                }
+                else enBas=false;*/
             }
         });
 
@@ -126,6 +129,11 @@ public class FenetreJeu extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
             }
         });
 
@@ -172,6 +180,15 @@ public class FenetreJeu extends javax.swing.JFrame {
         Client.deconnexion();
     }//GEN-LAST:event_formWindowClosing
 
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        //System.out.println(enBas);
+        
+        if(enBas) {
+            JScrollBar scroll = jScrollPane1.getVerticalScrollBar();
+            scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
+        }
+    }//GEN-LAST:event_formComponentResized
+
     /**
      * @param args the command line arguments
      */
@@ -216,11 +233,13 @@ public class FenetreJeu extends javax.swing.JFrame {
         scrollMax = scroll.getMaximum();
         scrollVisible = scroll.isShowing();
 
-        if (scrollVisible && scroll.getValue() + scroll.getVisibleAmount() == scrollMax) {
+        if (!scrollVisible || scroll.getValue() + scroll.getVisibleAmount() == scrollMax) {
             enBas = true;
+            scrollAuto = true;
             //scrollMax = scroll.getMaximum();
         } else {
             enBas = false;
+            scrollAuto = false;
         }
 
         HTMLDocument d = (HTMLDocument) afficheurHTML.getStyledDocument();
@@ -237,7 +256,7 @@ public class FenetreJeu extends javax.swing.JFrame {
             Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        scrollAuto = true;
+        
 
         /*
          * if (enBas) { while (scroll.getMaximum() == scrollMax) { try {
