@@ -54,10 +54,15 @@ public class Authentification implements Runnable {
             login = loginPass.split(" ")[0];
 
             if (!isValid(loginPass)) {
-                out.writeUTF("erreur");
+                out.writeInt(-1);
                 out.flush();
-            } else {
-                out.writeUTF("pret");
+            } 
+            else if(Serveur.getJoueur(login)!=null) {
+                out.writeInt(-2);
+                out.flush();
+            }
+            else {
+                out.writeInt(0);
                 out.flush();
 
                 //Création du joueur
