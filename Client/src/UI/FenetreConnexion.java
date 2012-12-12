@@ -45,6 +45,7 @@ public class FenetreConnexion extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         champPass = new javax.swing.JPasswordField();
         boutonConnexion = new javax.swing.JButton();
+        erreurLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Citysides Alpha");
@@ -61,6 +62,10 @@ public class FenetreConnexion extends javax.swing.JFrame {
             }
         });
 
+        erreurLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        erreurLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        erreurLabel.setText("Citysides "+Client.getVersion());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -68,6 +73,7 @@ public class FenetreConnexion extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(erreurLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -81,8 +87,10 @@ public class FenetreConnexion extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(erreurLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(champLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -92,7 +100,7 @@ public class FenetreConnexion extends javax.swing.JFrame {
                     .addComponent(champPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(boutonConnexion)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -147,10 +155,15 @@ public class FenetreConnexion extends javax.swing.JFrame {
             }
         });
     }
+    public void erreur(String s) {
+        erreurLabel.setForeground(java.awt.Color.red);
+        erreurLabel.setText(s);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boutonConnexion;
     private javax.swing.JTextField champLogin;
     private javax.swing.JPasswordField champPass;
+    private javax.swing.JLabel erreurLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables

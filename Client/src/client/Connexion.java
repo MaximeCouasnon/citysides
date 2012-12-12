@@ -91,17 +91,23 @@ public class Connexion implements Runnable {
                  */
             }
             else if (retour == -1) {
-                System.err.println("Mauvais login ou mot de passe.");
+                System.err.println("Mauvais identifiants");
+                Client.getFenetreConnexion().erreur("Mauvais identifiants");
             } else if (retour == -2) {
-                System.err.println("Ce joueur est déjà connecté.");
+                System.err.println("Compte déjà actif");
+                Client.getFenetreConnexion().erreur("Compte déjà actif");
             }
-            else System.err.println("Code d'erreur inconnu !");
+            else {
+                System.err.println("Erreur inconnue !");
+                Client.getFenetreConnexion().erreur("Erreur inconnue !");
+            }
 
 
 
 
         } catch (IOException e) {
             System.err.println("Le serveur ne répond plus ");
+            Client.getFenetreConnexion().erreur("Le serveur ne répond plus ");
             e.printStackTrace();
         }
     }

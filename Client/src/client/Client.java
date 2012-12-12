@@ -25,14 +25,14 @@ import messages.DeconnexionJoueur;
 import messages.Text;
 
 public class Client {
-
+    private static String version="a0.1";
     private static Socket socket = null;
     private static Thread connecteur;
     private static FenetreConnexion fenetreConnexion = new FenetreConnexion();
     private static FenetreJeu fenetreJeu = new FenetreJeu();
     private static Joueur moi;
     private static DonneesSalon donneesSalon;
-
+    
     public static void main(String[] args) {
         fenetreConnexion.setLocationRelativeTo(null);
         fenetreConnexion.setVisible(true);
@@ -49,9 +49,11 @@ public class Client {
             connecteur = new Thread(new Connexion(socket, login, pass));
             connecteur.start();
         } catch (UnknownHostException e) {
-            System.err.println("Impossible de se connecter à l'adresse " + socket.getLocalAddress());
+            System.err.println("Serveur injoignable");
+            fenetreConnexion.erreur("IP serveur injoignable");
         } catch (IOException e) {
-            System.err.println("Aucun serveur à l'écoute du port " + socket.getLocalPort());
+            System.err.println("Port serveur injoignable");
+            fenetreConnexion.erreur("Port serveur injoignable");
         }
     }
     
@@ -129,5 +131,13 @@ public class Client {
         Client.donneesSalon = d;
         ecrire("Vous êtes sur <strong>**" + donneesSalon.getNom() + "**</strong>");
         //System.out.println("Vous êtes sur **"+donneesSalon.getNom()+"**");
+    }
+
+    public static String getVersion() {
+        return version;
+    }
+
+    public static FenetreConnexion getFenetreConnexion() {
+        return fenetreConnexion;
     }
 }
