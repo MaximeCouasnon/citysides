@@ -1,0 +1,5 @@
+Pour lancer le serveur : java -jar Serveur.jar [options]
+
+Liste des options :
+   --help		Affiche l'aide
+-v --verbose	Active le mode verbeux

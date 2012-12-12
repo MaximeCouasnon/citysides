@@ -25,10 +25,13 @@ public class Accepter_connexion implements Runnable {
 
     @Override
     public void run() {
+
         while (flag == true) {
             try {
                 socket = serverSocket.accept();
-                System.out.println("Tentative de connexion de " + socket.getInetAddress());
+                if (Serveur.isVerbose()) {
+                    System.out.println("Tentative de connexion de " + socket.getInetAddress());
+                }
 
                 auth = new Thread(new Authentification(socket));
                 auth.start();

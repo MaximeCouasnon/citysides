@@ -4,7 +4,6 @@
  */
 package serveur;
 
-import messages.Text;
 import données.Joueur;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,7 +60,7 @@ public class Salon {
         //Envoi du message d'arrivée à tous les gens du salon
         envoiObjet(new ArriveeJoueurSalon(nom,login));
 
-        System.out.println("**" + nom + "** : " + login + " a rejoint le salon");
+        if(Serveur.isVerbose())System.out.println("**" + nom + "** : " + login + " a rejoint le salon");
     }
 
     public synchronized void removeJoueur(String login) {
@@ -71,7 +70,7 @@ public class Salon {
         //Envoi du message de départ à tous les gens du salon
         envoiObjet(new DepartJoueurSalon(nom,login));
         
-        System.out.println("**" + nom + "** : " +login + " a quitté le salon");
+        if(Serveur.isVerbose())System.out.println("**" + nom + "** : " +login + " a quitté le salon");
     }
 
     public Set getNomsJoueurs() {
