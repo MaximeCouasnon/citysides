@@ -51,7 +51,7 @@ public class Connexion implements Runnable {
             OutputStream os = socket.getOutputStream();
             out = new ObjectOutputStream(os);
 
-            
+
 
             //while (!connect) {
                 /*
@@ -65,27 +65,23 @@ public class Connexion implements Runnable {
             out.writeUTF(login + " " + pass);
             out.flush();
 
-            if (!in.readUTF().equals("pret")) {
-                System.err.println("Vos informations sont incorrectes ");
-            } else {
+            int retour=in.readInt();
+            if (retour == 0) {
                 //Lecture du numéro du salon
                 //int salon = in.readInt();
                 //System.out.println(salon);
 
-                /*try {
-                    Set nomsJoueurs = (Set) in.readObject();
-                    //System.out.println(nomsJoueurs.size());
-
-                    Iterator i = nomsJoueurs.iterator();
-                    while (i.hasNext()) {
-                        System.out.println(i.next());
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }*/
+                /*
+                 * try { Set nomsJoueurs = (Set) in.readObject();
+                 * //System.out.println(nomsJoueurs.size());
+                 *
+                 * Iterator i = nomsJoueurs.iterator(); while (i.hasNext()) {
+                 * System.out.println(i.next()); } } catch
+                 * (ClassNotFoundException e) { e.printStackTrace(); }
+                 */
 
                 Client.setMoi(new Joueur(login, in, out));
-                
+
                 Client.jeu();
 
                 /*
@@ -94,7 +90,12 @@ public class Connexion implements Runnable {
                  * messager.start(); }
                  */
             }
-
+            else if (retour == -1) {
+                System.err.println("Mauvais login ou mot de passe.");
+            } else if (retour == -2) {
+                System.err.println("Ce joueur est déjà connecté.");
+            }
+            else System.err.println("Code d'erreur inconnu !");
 
 
 
