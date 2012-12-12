@@ -41,7 +41,7 @@ public class Recepteur extends Thread {
                 if (s.equals("messages.Text")) {
                     Text t = (Text) o;
                     t.setMessage(StringEscapeUtils.escapeHtml4(t.getMessage()));
-                    System.out.println(t.getLogin() + " : " + t.getMessage());
+                    if(Serveur.isVerbose())System.out.println(t.getLogin() + " : " + t.getMessage());
                 }
 
                 //Forward du message à tous les gens du salon
