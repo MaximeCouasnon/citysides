@@ -5,16 +5,24 @@
 package UI;
 
 import client.Client;
-import java.awt.event.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BoundedRangeModel;
 import javax.swing.JScrollBar;
+import javax.swing.SizeRequirements;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.text.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.InlineView;
+import javax.swing.text.html.ParagraphView;
 
 /**
  *
@@ -22,12 +30,12 @@ import javax.swing.text.html.HTMLDocument;
  */
 public class FenetreJeu extends javax.swing.JFrame {
 
-    private DefaultCaret caret;
+    //private DefaultCaret caret;
     private boolean vide = true;
     private boolean scrollVisible = true;
     private boolean scrollAuto;
     private int scrollMax;
-    private boolean enBas=true;
+    private boolean enBas = true;
 
     /**
      * Creates new form FenetreJeu
@@ -39,6 +47,54 @@ public class FenetreJeu extends javax.swing.JFrame {
             Logger.getLogger(FenetreConnexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         initComponents();
+        afficheurHTML.setEditorKit(new HTMLEditorKit() {
+
+            @Override
+            public ViewFactory getViewFactory() {
+
+                return new HTMLFactory() {
+
+                    @Override
+                    public View create(Element e) {
+                        View v = super.create(e);
+                        //if(v.getClass().getName().equals("javax.swing.text.html.InlineView")){ 
+                      /*
+                         * if(v instanceof InlineView){ return new
+                         * InlineView(e){ public int getBreakWeight(int axis,
+                         * float pos, float len) { return GoodBreakWeight; }
+                         * public View breakView(int axis, int p0, float pos,
+                         * float len) { if(axis == View.X_AXIS) {
+                         * checkPainter(); int p1 =
+                         * getGlyphPainter().getBoundedPosition(this, p0, pos,
+                         * len); if(p0 == getStartOffset() && p1 ==
+                         * getEndOffset()) { return this; } return
+                         * createFragment(p0, p1); } return this; } }; 
+                      }
+                         */
+                        if (v instanceof ParagraphView) {
+                            return new ParagraphView(e) {
+
+                                @Override
+                                protected SizeRequirements calculateMinorAxisRequirements(int axis, SizeRequirements r) {
+                                    if (r == null) {
+                                        r = new SizeRequirements();
+                                    }
+                                    float pref = layoutPool.getPreferredSpan(axis);
+                                    float min = layoutPool.getMinimumSpan(axis);
+                                    // Don't include insets, Box.getXXXSpan will include them. 
+                                    r.minimum = (int) min;
+                                    r.preferred = Math.max(r.minimum, (int) pref);
+                                    r.maximum = Integer.MAX_VALUE;
+                                    r.alignment = 0.5f;
+                                    return r;
+                                }
+                            };
+                        }
+                        return v;
+                    }
+                };
+            }
+        });
         /*
          * caret = (DefaultCaret) afficheurHTML.getCaret();
          * caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -96,12 +152,13 @@ public class FenetreJeu extends javax.swing.JFrame {
 
                 if (scrollAuto) {
                     scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
-                    scrollAuto=false;
+                    scrollAuto = false;
                 }
-                /*else if(!scrollVisible || scroll.getValue() + scroll.getVisibleAmount() == scroll.getMaximum()) {
-                    enBas=true;
-                }
-                else enBas=false;*/
+                /*
+                 * else if(!scrollVisible || scroll.getValue() +
+                 * scroll.getVisibleAmount() == scroll.getMaximum()) {
+                 * enBas=true; } else enBas=false;
+                 */
             }
         });
 
@@ -182,8 +239,8 @@ public class FenetreJeu extends javax.swing.JFrame {
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         //System.out.println(enBas);
-        
-        if(enBas) {
+
+        if (enBas) {
             JScrollBar scroll = jScrollPane1.getVerticalScrollBar();
             scroll.setValue(scroll.getMaximum() - scroll.getVisibleAmount());
         }
@@ -256,7 +313,7 @@ public class FenetreJeu extends javax.swing.JFrame {
             Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
+
 
         /*
          * if (enBas) { while (scroll.getMaximum() == scrollMax) { try {
@@ -266,8 +323,7 @@ public class FenetreJeu extends javax.swing.JFrame {
          * } catch (InterruptedException ex) {
          * Logger.getLogger(FenetreJeu.class.getName()).log(Level.SEVERE, null,
          * ex); } } scroll.setValue(scroll.getMaximum() -
-         * scroll.getVisibleAmount());
-        }
+         * scroll.getVisibleAmount()); }
          */
 
         /*
