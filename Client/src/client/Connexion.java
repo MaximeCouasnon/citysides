@@ -4,7 +4,7 @@
  */
 package client;
 
-import données.Joueur;
+import donnees.Joueur;
 import java.io.*;
 import java.net.Socket;
 import java.util.Iterator;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Watre
  */
-public class Connexion implements Runnable {
+public abstract class Connexion implements Runnable {
 
     private Socket socket = null;
     public static Thread messager;
@@ -35,7 +35,7 @@ public class Connexion implements Runnable {
         pass = p;
     }
 
-    public void run() {
+    /*public void run() {
 
         try {
             /*
@@ -44,7 +44,7 @@ public class Connexion implements Runnable {
              * sc = new Scanner(System.in);
              */
 
-            InputStream is = socket.getInputStream();
+            /*InputStream is = socket.getInputStream();
             in = new ObjectInputStream(is);
             //in = new BufferedReader(new InputStreamReader(ois));
 
@@ -62,7 +62,7 @@ public class Connexion implements Runnable {
              * out.println(pass); out.flush();
              */
 
-            out.writeUTF(login + " " + pass);
+            /*out.writeUTF(login + " " + pass);
             out.flush();
 
             int retour=in.readInt();
@@ -80,26 +80,26 @@ public class Connexion implements Runnable {
                  * (ClassNotFoundException e) { e.printStackTrace(); }
                  */
 
-                Client.setMoi(new Joueur(login, in, out));
+                /*CitysidesClient.setMoi(new Joueur(login, in, out));
 
-                Client.jeu();
+                CitysidesClient.jeu();
 
                 /*
                  * if (connect) { //System.out.println("Démarrage messager...");
                  * messager = new Thread(new Messager(in, out));
                  * messager.start(); }
                  */
-            }
+            /*}
             else if (retour == -1) {
                 System.err.println("Mauvais identifiants");
-                Client.getFenetreConnexion().erreur("Mauvais identifiants");
+                CitysidesClient.getFenetreConnexion().erreur("Mauvais identifiants");
             } else if (retour == -2) {
                 System.err.println("Compte déjà actif");
-                Client.getFenetreConnexion().erreur("Compte déjà actif");
+                CitysidesClient.getFenetreConnexion().erreur("Compte déjà actif");
             }
             else {
                 System.err.println("Erreur inconnue !");
-                Client.getFenetreConnexion().erreur("Erreur inconnue !");
+                CitysidesClient.getFenetreConnexion().erreur("Erreur inconnue !");
             }
 
 
@@ -107,8 +107,8 @@ public class Connexion implements Runnable {
 
         } catch (IOException e) {
             System.err.println("Le serveur ne répond plus ");
-            Client.getFenetreConnexion().erreur("Le serveur ne répond plus ");
+            CitysidesClient.getFenetreConnexion().erreur("Le serveur ne répond plus ");
             e.printStackTrace();
         }
-    }
+    }*/
 }

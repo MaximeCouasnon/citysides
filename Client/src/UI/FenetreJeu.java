@@ -4,7 +4,7 @@
  */
 package UI;
 
-import client.Client;
+import client.CitysidesClient;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
@@ -232,13 +232,14 @@ public class FenetreJeu extends javax.swing.JFrame {
 
     private void barreInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_barreInputKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && !barreInput.getText().equals("")) {
-            Client.envoyerText(barreInput.getText());
+            CitysidesClient.envoyerText(barreInput.getText());
             barreInput.setText(null);
         }
     }//GEN-LAST:event_barreInputKeyPressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Client.deconnexion();
+        CitysidesClient.setExiting(true);
+        CitysidesClient.getClient().stop();
     }//GEN-LAST:event_formWindowClosing
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized

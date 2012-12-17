@@ -4,9 +4,7 @@
  */
 package UI;
 
-import client.Client;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import client.CitysidesClient;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -64,7 +62,7 @@ public class FenetreConnexion extends javax.swing.JFrame {
 
         erreurLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         erreurLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        erreurLabel.setText("Citysides "+Client.getVersion());
+        erreurLabel.setText("Citysides "+client.CitysidesClient.getVersion());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,8 +108,8 @@ public class FenetreConnexion extends javax.swing.JFrame {
         String login = this.champLogin.getText();
         String pass = new String(this.champPass.getPassword());
         if (!login.isEmpty() && !pass.isEmpty()) {
-            this.boutonConnexion.setText("Patientez...");
-            Client.connexion(login, pass);
+            boutonConnexion.setText("Patientez...");
+            CitysidesClient.connexion(login, pass);
         }
     }//GEN-LAST:event_boutonConnexionActionPerformed
     /**
@@ -156,6 +154,7 @@ public class FenetreConnexion extends javax.swing.JFrame {
         });
     }
     public void erreur(String s) {
+        boutonConnexion.setText("Connexion");
         erreurLabel.setForeground(java.awt.Color.red);
         erreurLabel.setText(s);
     }
