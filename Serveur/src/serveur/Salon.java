@@ -4,13 +4,13 @@
  */
 package serveur;
 
-import données.Joueur;
+import donnees.Joueur;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import messages.ArriveeJoueurSalon;
-import messages.DepartJoueurSalon;
-import messages.ListeNomsJoueursSalon;
+import serveur.Network.ArriveeJoueurSalon;
+import serveur.Network.DepartJoueurSalon;
+import serveur.Network.ListeNomsJoueursSalon;
 
 /**
  *
@@ -34,33 +34,34 @@ public class Salon {
         Joueur j;
         Iterator i = nomsJoueurs.iterator();
         while (i.hasNext()) {
-            j = Serveur.getJoueur((String) i.next());
-            j.getEmetteur().envoiObjet(o);
+            j = CitysidesServeur.getJoueur((String) i.next());
+            CitysidesServeur.getServer().sendToTCP(j.getIdConnection(), o);
         }
     }
     
     //Envoi d'un objet à tous les joueurs du salon
     public void envoiObjet(String login, Object o) {
-        Joueur j = Serveur.getJoueur(login);
-        j.getEmetteur().envoiObjet(o);
+        Joueur j = CitysidesServeur.getJoueur(login);
+        CitysidesServeur.getServer().sendToTCP(j.getIdConnection(), o);
     }
-
-    /*public void envoiNomsJoueurs(ListeNomsJoueursSalon liste) {
-        Joueur j = Serveur.getJoueur(login);
-        j.getEmetteur().envoiObjet(nomsJoueurs);
-    }*/
 
     public synchronized void addJoueur(String login) {
         //Envoi de la liste des joueurs au nouvel arrivant
-        envoiObjet(login, new ListeNomsJoueursSalon(nom,nomsJoueurs));
+        ListeNomsJoueursSalon l=new ListeNomsJoueursSalon();
+        l.nomsJoueurs=nomsJoueurs;
+        l.salon=nom;
+        envoiObjet(login, l);
         
         //Ajout du login à la liste des joueurs présents
         nomsJoueurs.add(login);
         
         //Envoi du message d'arrivée à tous les gens du salon
-        envoiObjet(new ArriveeJoueurSalon(nom,login));
+        ArriveeJoueurSalon a=new ArriveeJoueurSalon();
+        a.login=login;
+        a.nomSalon=nom;
+        envoiObjet(a);
 
-        if(Serveur.isVerbose())System.out.println("**" + nom + "** : " + login + " a rejoint le salon");
+        if(CitysidesServeur.isVerbose())System.out.println("**" + nom + "** : " + login + " a rejoint le salon");
     }
 
     public synchronized void removeJoueur(String login) {
@@ -68,9 +69,12 @@ public class Salon {
         nomsJoueurs.remove(login);
         
         //Envoi du message de départ à tous les gens du salon
-        envoiObjet(new DepartJoueurSalon(nom,login));
+        DepartJoueurSalon d=new DepartJoueurSalon();
+        d.salon=nom;
+        d.login=login;
+        envoiObjet(d);
         
-        if(Serveur.isVerbose())System.out.println("**" + nom + "** : " +login + " a quitté le salon");
+        if(CitysidesServeur.isVerbose())System.out.println("**" + nom + "** : " +login + " a quitté le salon");
     }
 
     public Set getNomsJoueurs() {
