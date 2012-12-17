@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 public class CitysidesClient {
 
-    private static String version = "a0.1";
+    private static String version = "a0.2";
     private static FenetreConnexion fenetreConnexion = new FenetreConnexion();
     private static FenetreJeu fenetreJeu = new FenetreJeu();
     private static Joueur moi;
